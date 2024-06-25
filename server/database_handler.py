@@ -106,7 +106,8 @@ class DatabaseHandler:
 
     def fetch_wear_item_tracking(self, item: int):
         cursor = self.conn.cursor()
-        select_query = f"SELECT * from {DbConstants.WEAR_ITEM_TRACKING} WHERE item_id = {item}"
+        select_query = (f"SELECT wit.*, wi.name from {DbConstants.WEAR_ITEM_TRACKING} as wit inner join {DbConstants.WEAR_ITEM} as wi"
+                        f" on wi.id == wit.item_id WHERE item_id = {item}")
         cursor.execute(select_query)
         rows = cursor.fetchall()
         cursor.close()
@@ -116,6 +117,23 @@ class DatabaseHandler:
         select_query = (f"select wi.id, wi.name, wi.type, wi.active, sum(wit.counter) as count from {DbConstants.WEAR_ITEM_TRACKING} as wit right join {DbConstants.WEAR_ITEM} as wi"
                         f" on wi.id == wit.item_id group by wi.id, wi.name, wi.type, wi.active")
         cursor = self.conn.cursor()
+        cursor.execute(select_query)
+        rows = cursor.fetchall()
+        cursor.close()
+        return rows
+
+    def search_wear_items(self, query_param):
+        select_query = f"select * from {DbConstants.WEAR_ITEM} where "
+        need_and = False
+        if query_param['name'] is not None:
+            select_query += f"name like '%{query_param['name']}%' "
+            need_and = True
+        elif query_param['color'] is not None:
+            if need_and:
+                select_query += " and "
+            select_query += f" color like '%{query_param['color']}%' "
+        cursor = self.conn.cursor()
+        print(f"HERE search query:: {select_query}")
         cursor.execute(select_query)
         rows = cursor.fetchall()
         cursor.close()

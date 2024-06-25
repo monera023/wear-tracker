@@ -35,3 +35,10 @@ class WearService:
         formatted_output = convert_to_wear_item_tracking_sum(output)
         return formatted_output
 
+    def search_wear_items(self, query_param_dict):
+        output = self.database_conn.search_wear_items(query_param_dict)
+        formatted_output = convert_to_wear_item(output)
+        return formatted_output
+
+
+
