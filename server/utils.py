@@ -16,7 +16,7 @@ def convert_to_wear_item_tracking(items):
     resp = []
     for item in items:
         print(f"IN convert_to_wear_item_tracking:: {item}")
-        resp.append(WearItemTrackingEntry(item_id=item[1], counter=item[2], date=item[3]))
+        resp.append(WearItemTrackingEntry(item_id=item[1], counter=item[2], date=item[3], name=item[4]))
     return resp
 
 def convert_to_wear_item_tracking_sum(items):

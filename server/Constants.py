@@ -27,6 +27,7 @@ class WearItemTrackingEntry(BaseModel):
     item_id: int
     counter: int
     date: str
+    name: Optional[str]
 
 class WearItemTrackingSumEntity(BaseModel):
     item_id: int
